@@ -1,66 +1,56 @@
-fn merge(mut arr: Vec<i32>, mut p: usize, mut q: usize, mut r: usize) {
+fn merge(arr: Vec<i32>, mut start: usize, mut mid: usize, mut end: usize) {
     // create subarrays
-    let n1 = q - p + 1;
-    let n2 = r - q;
-
-    let mut l: Vec<i32> = Vec::with_capacity(n1);
-    let mut m: Vec<i32> = Vec::with_capacity(n2);
-
-    for i in 0..n1 {
-        l.push(arr[p + i]);
-    }
-    for j in 0..n2 {
-        m.push(arr[q + 1 + j]);
-    }
+    let mut left = vec![&mut arr[0..=mid].to_vec()];
+    let right = vec![&mut arr[mid..=end].to_vec()];
 
     // index of subarrays and main array
     let mut i = 0;
     let mut j = 0;
-    let mut k = p;
+    let mut k = start;
+
+    let left_last_index = left.len() - 1;
+    let right_last_index = right.len() - 1;
 
     // pick larger among
     // elements L and M and place them in the correct position
-    while i < n1 - 1 && j < n2 - 1 {
-        if l[i] <= m[j] {
-            arr[k] = l[i];
+    while i < left_last_index && j < right_last_index {
+        if left[i] <= right[j] {
+            arr[k] = left[i];
             i += 1;
         } else {
-            arr[k] = m[j];
+            arr[k] = right[j];
             j += 1;
         }
         k += 1;
     }
 
-    while i < n1 - 1 {
-        arr[k] = l[i];
+    while i < left - 1 {
+        arr[k] = left[i];
         i += 1;
         k += 1;
     }
 
-    while j < n2 - 1 {
-        arr[k] = m[j];
+    while j < right - 1 {
+        arr[k] = right[j];
         j += 1;
         k += 1;
     }
-
-    
 }
 
-fn merge_sort(arr: &mut Vec<i32>, mut l: usize, mut r: usize) {
-    if l < r {
-        let m = l + (r - 1) / 2;
+fn merge_sort(arr: &mut Vec<i32>, mut start: usize, mut end: usize) {
+    if start < end {
+        let m = start + (end - 1) / 2;
 
-        merge_sort(arr, l, m);
-        merge_sort(arr, m + 1, r);
+        merge_sort(arr, start, m);
+        merge_sort(arr, m + 1, end);
 
-        let sorted = merge(arr, l, m, r);
+        let sorted = merge(arr, start, m, end);
     }
-    
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::merge_sort;
+    use super::*;
 
     #[test]
     fn bubble_test() {
