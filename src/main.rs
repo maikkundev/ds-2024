@@ -1,19 +1,17 @@
-fn merge(arr: Vec<i32>, mut start: usize, mut mid: usize, mut end: usize) {
+fn merge(arr: &mut Vec<i32>, start: usize, mid: usize, end: usize) {
     // create subarrays
-    let mut left = vec![&mut arr[0..=mid].to_vec()];
-    let right = vec![&mut arr[mid..=end].to_vec()];
+    let left = arr[start..=mid].to_vec();
+    let right = arr[mid + 1..=end].to_vec();
 
     // index of subarrays and main array
     let mut i = 0;
     let mut j = 0;
     let mut k = start;
 
-    let left_last_index = left.len() - 1;
-    let right_last_index = right.len() - 1;
 
     // pick larger among
     // elements L and M and place them in the correct position
-    while i < left_last_index && j < right_last_index {
+    while i < left.len() && j < right.len() {
         if left[i] <= right[j] {
             arr[k] = left[i];
             i += 1;
@@ -24,27 +22,27 @@ fn merge(arr: Vec<i32>, mut start: usize, mut mid: usize, mut end: usize) {
         k += 1;
     }
 
-    while i < left - 1 {
+    while i < left.len() {
         arr[k] = left[i];
         i += 1;
         k += 1;
     }
 
-    while j < right - 1 {
+    while j < right.len() {
         arr[k] = right[j];
         j += 1;
         k += 1;
     }
 }
 
-fn merge_sort(arr: &mut Vec<i32>, mut start: usize, mut end: usize) {
+fn merge_sort(arr: &mut Vec<i32>, start: usize, end: usize) {
     if start < end {
-        let m = start + (end - 1) / 2;
+        let m = start + (end - start) / 2;
 
         merge_sort(arr, start, m);
         merge_sort(arr, m + 1, end);
 
-        let sorted = merge(arr, start, m, end);
+        merge(arr, start, m, end);
     }
 }
 
@@ -54,10 +52,11 @@ mod tests {
 
     #[test]
     fn bubble_test() {
-        let arr = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
+        let mut arr = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
+        let arr_len = arr.len();
         let mut sorted_arr = arr.clone();
         sorted_arr.sort();
-        merge_sort(&mut arr, 0, arr.len() - 1);
+        merge_sort(&mut arr, 0, arr_len - 1);
         assert_eq!(arr, sorted_arr)
     }
 }
