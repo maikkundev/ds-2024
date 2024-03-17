@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 fn merge(arr: &mut Vec<i32>, start: usize, mid: usize, end: usize) {
     // Create subarrays
     let left = arr[start..=mid].to_vec();
