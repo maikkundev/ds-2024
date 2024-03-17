@@ -1,5 +1,10 @@
 // How it works: https://en.wikipedia.org/wiki/Quicksort
 // Rust Implementation: https://gist.github.com/lispandfound/96b9065bf240f94a0c0f
+
+fn partition() -> Vec<i32> {
+    vec![]
+}
+
 fn quick_sort(vec: &Vec<i32>) -> Vec<i32> {
     match vec.len() {
         0..=1 => vec.to_vec(),
