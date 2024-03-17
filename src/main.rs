@@ -1,4 +1,5 @@
-// Bubble sort fucntion
+#![allow(dead_code)]
+
 fn bubble_sort(mut arr: Vec<i32>) -> Vec<i32> {
     for i in 0..(arr.len()) {
         for j in 0..(arr.len() - i - 1) {
@@ -11,6 +12,8 @@ fn bubble_sort(mut arr: Vec<i32>) -> Vec<i32> {
     arr
 }
 
+fn main() {}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -22,5 +25,3 @@ mod tests {
         assert_eq!(vec![1, 2, 3, 4, 5, 6, 7, 8, 9], result);
     }
 }
-
-fn main() {}
