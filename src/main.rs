@@ -1,4 +1,5 @@
 mod quicksort;
+mod selection_sort;
 use quicksort::quicksort;
 
 fn main() {
