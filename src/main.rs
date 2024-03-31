@@ -1,9 +1,11 @@
 #![allow(unused_imports)]
 mod bubble_sort;
+mod heapsort;
 mod merge_sort;
 mod quicksort;
 
 use bubble_sort::bubble_sort;
+use heapsort::heapsort;
 use merge_sort::merge_sort;
 use quicksort::quicksort;
 
