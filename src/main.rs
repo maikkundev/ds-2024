@@ -1,20 +1,43 @@
 // How it works: https://en.wikipedia.org/wiki/Quicksort
 // Rust Implementation: https://gist.github.com/lispandfound/96b9065bf240f94a0c0f
-fn quick_sort(vec: &Vec<i32>) -> Vec<i32> {
-    match vec.len() {
-        0..=1 => vec.to_vec(),
-        _ => {
-            let result = vec![];
-
-            result
+fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
+    // If arr length is 0 or 1, return the vec
+    if vec.len() <= 1 {
+        println!("vec length {}", vec.len());
+        return vec.to_owned();
+    }
+    // Create the two sub-arrays
+    // Do so by comparing the value of the pivot to the one an index before - see if the pivot is a higher value than the
+    // other index's value.
+    let mut left: Vec<i32> = Vec::new();
+    let mut right: Vec<i32> = Vec::new();
+    // Loop through the vec and
+    for el in &vec[1..] {
+        if *el <= vec[0] {
+            left.push(*el)
+        } else {
+            right.push(*el)
         }
     }
+    // Push pivot into right slice
+    right.push(vec[0]);
+    println!("left slice {:?}", left);
+    println!("right slice {:?}", right);
+    // Partitioned left and right slices
+    let mut part_left = partition(&mut left);
+    let mut part_right = partition(&mut right);
+    part_left.append(&mut part_right);
+    part_left
+}
+
+fn quicksort(vec: &mut Vec<i32>) -> Vec<i32> {
+    partition(vec)
 }
 
 fn main() {
-    let vec = vec![1, 5, 10, 3, 5, 5, 6, 7, 4, 93, 12];
+    let mut vec = vec![1, 5, 10, 3, 5, 5, 6, 7, 4, 93, 12];
 
-    println!("{:?}", quick_sort(&vec));
+    println!("{:?}", quicksort(&mut vec));
 }
 
 #[cfg(test)]
@@ -23,21 +46,29 @@ mod tests {
 
     #[test]
     fn quicksort_no_elements() {
-        let vec = vec![];
-        assert_eq!(quick_sort(&vec), [])
+        let mut vec = vec![];
+        assert_eq!(quicksort(&mut vec), [])
     }
 
     #[test]
     fn quicksort_one_element() {
-        let vec = vec![1];
-        assert_eq!(quick_sort(&vec), [1])
+        let mut vec = vec![1];
+        assert_eq!(quicksort(&mut vec), [1])
     }
 
     #[test]
     fn quicksort_ten_elements() {
-        let vec = vec![1, 5, 9, 3, 5, 11, 18, 51, 103, 2];
+        let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
         let mut sorted_vec = vec.clone();
         sorted_vec.sort();
-        assert_eq!(quick_sort(&vec), sorted_vec)
+        assert_eq!(quicksort(&mut vec), sorted_vec)
+    }
+
+    #[test]
+    fn quicksort_ten_elements_duplicates() {
+        let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
+        let mut sorted_vec = vec.clone();
+        sorted_vec.sort();
+        assert_eq!(quicksort(&mut vec), sorted_vec)
     }
 }
