@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-pub fn bubble_sort(mut arr: Vec<i32>) -> Vec<i32> {
+pub fn bubble_sort(arr: &mut Vec<i32>) -> Vec<i32> {
     for i in 0..(arr.len()) {
         for j in 0..(arr.len() - i - 1) {
             if arr[j] > arr[j + 1] {
@@ -9,5 +9,5 @@ pub fn bubble_sort(mut arr: Vec<i32>) -> Vec<i32> {
         }
     }
 
-    arr
+    arr.to_owned()
 }
