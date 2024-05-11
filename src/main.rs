@@ -2,6 +2,7 @@
 mod bubblesort;
 mod mergesort;
 mod quicksort;
+mod selection_sort;
 mod shellsort;
 
 use bubblesort::bubblesort;
