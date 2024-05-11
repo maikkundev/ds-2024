@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 pub fn shellsort(arr: &mut Vec<i32>, size: usize) {
     let mut interval = size / 2;
     while interval > 0 {
