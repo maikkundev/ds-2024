@@ -5,6 +5,7 @@ mod quicksort;
 mod shellsort;
 
 use bubblesort::bubblesort;
+use insertionsort::insertionsort;
 use mergesort::mergesort;
 use quicksort::quicksort;
 use shellsort::shellsort;
@@ -15,5 +16,6 @@ fn main() {
     println!("{:?}", bubblesort(&mut vec));
     println!("{:?}", quicksort(&mut vec));
     println!("{:?}", mergesort(&mut vec, 0, length - 1));
+    println!("{:?}", insertionsort(&mut vec));
     println!("{:?}", shellsort(&mut vec, length))
 }

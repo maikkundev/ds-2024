@@ -1,4 +1,5 @@
-fn insertionsort(vec: &mut Vec<i32>) -> Vec<i32> {
+pub fn insertionsort(vec: &mut Vec<i32>) -> Vec<i32> {
+    // Loop over the vec
     for i in 1..vec.len() {
         let mut j = i;
         while j > 0 && vec[j - 1] > vec[j] {
@@ -6,6 +7,7 @@ fn insertionsort(vec: &mut Vec<i32>) -> Vec<i32> {
             j = j - 1;
         }
     }
+    // Return vec
     vec.to_owned()
 }
 
