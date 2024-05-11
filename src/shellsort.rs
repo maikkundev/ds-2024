@@ -19,17 +19,46 @@ mod tests {
     use super::*;
 
     #[test]
-    fn shell_sort_test() {
-        let mut vec = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
+    fn no_elements() {
+        let mut vec = vec![];
         let length = vec.len();
         let mut sorted_vec = vec.clone();
 
         sorted_vec.sort();
-        println!("Original Vec: {:?}", vec);
         shellsort(&mut vec, length);
-        println!("Sorted Vec with Shell Sort: {:?}", vec);
-        println!("{:?}", sorted_vec);
+        assert_eq!(vec, sorted_vec)
+    }
 
+    #[test]
+    fn one_element() {
+        let mut vec = vec![1];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        shellsort(&mut vec, length);
+        assert_eq!(vec, sorted_vec);
+    }
+
+    #[test]
+    fn ten_elements() {
+        let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        shellsort(&mut vec, length);
+        assert_eq!(vec, sorted_vec);
+    }
+
+    #[test]
+    fn ten_elements_with_duplicates() {
+        let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        shellsort(&mut vec, length);
         assert_eq!(vec, sorted_vec);
     }
 }
