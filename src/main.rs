@@ -1,13 +1,13 @@
-#![allow(unused_imports)]
 mod bubblesort;
 mod mergesort;
 mod quicksort;
-mod selection_sort;
+mod selectionsort;
 mod shellsort;
 
 use bubblesort::bubblesort;
 use mergesort::mergesort;
 use quicksort::quicksort;
+use selectionsort::selectionsort;
 use shellsort::shellsort;
 
 fn main() {
@@ -16,5 +16,6 @@ fn main() {
     println!("{:?}", bubblesort(&mut vec));
     println!("{:?}", quicksort(&mut vec));
     println!("{:?}", mergesort(&mut vec, 0, length - 1));
+    println!("{:?}", selectionsort(&mut vec));
     println!("{:?}", shellsort(&mut vec, length));
 }
