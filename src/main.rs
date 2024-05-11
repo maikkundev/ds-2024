@@ -1,9 +1,20 @@
+#![allow(unused_imports)]
+mod bubblesort;
+mod mergesort;
 mod quicksort;
 mod selection_sort;
+mod shellsort;
+
+use bubblesort::bubblesort;
+use mergesort::mergesort;
 use quicksort::quicksort;
+use shellsort::shellsort;
 
 fn main() {
-    let mut vec = vec![1, 5, 10, 3, 5, 5, 6, 7, 4, 93, 12];
-
+    let mut vec = vec![1, 3, 5, 7, 1, 9, 3, 3, 4, 1, 12, 3];
+    let length = vec.len();
+    println!("{:?}", bubblesort(&mut vec));
     println!("{:?}", quicksort(&mut vec));
+    println!("{:?}", mergesort(&mut vec, 0, length - 1));
+    println!("{:?}", shellsort(&mut vec, length));
 }
