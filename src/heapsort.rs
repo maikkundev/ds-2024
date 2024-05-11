@@ -1,4 +1,7 @@
+use std::collections::BinaryHeap;
+
 pub fn heapsort(vec: &mut Vec<i32>) -> Vec<i32> {
+    let mut heap: BinaryHeap<i32> = BinaryHeap::new();
     vec![]
 }
 
