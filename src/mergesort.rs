@@ -36,14 +36,35 @@ fn merge(arr: &mut Vec<i32>, start: usize, mid: usize, end: usize) {
     }
 }
 
-pub fn merge_sort(arr: &mut Vec<i32>, start: usize, end: usize) {
+pub fn mergesort(arr: &mut Vec<i32>, start: usize, end: usize) {
     if start < end {
         let middle = start + (end - start) / 2;
 
-        merge_sort(arr, start, middle);
-        merge_sort(arr, middle + 1, end);
+        mergesort(arr, start, middle);
+        mergesort(arr, middle + 1, end);
 
         // Merge sorted subarrays
         merge(arr, start, middle, end);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn merge_sort_test() {
+        let mut arr = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
+        let length = arr.len();
+        let mut sorted_arr = arr.clone();
+
+        sorted_arr.sort();
+        mergesort(&mut arr, 0, length - 1);
+        print!(
+            "Array: {:?}, Sorted Array with Merge Sort: {:?}",
+            arr, sorted_arr
+        );
+
+        assert_eq!(arr, sorted_arr);
     }
 }
