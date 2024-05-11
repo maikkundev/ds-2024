@@ -1,7 +1,7 @@
 // How it works: https://en.wikipedia.org/wiki/Quicksort
 // Rust Implementation: https://gist.github.com/lispandfound/96b9065bf240f94a0c0f
 fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
-    // If arr length is 0 or 1, return the vec
+    // If vec length is 0 or 1, return the vec
     if vec.len() <= 1 {
         println!("vec length {}", vec.len());
         return vec.to_owned();
@@ -32,4 +32,37 @@ fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
 
 pub fn quicksort(vec: &mut Vec<i32>) -> Vec<i32> {
     partition(vec)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn no_elements() {
+        let mut vec = vec![];
+        assert_eq!(quicksort(&mut vec), [])
+    }
+
+    #[test]
+    fn one_element() {
+        let mut vec = vec![1];
+        assert_eq!(quicksort(&mut vec), [1])
+    }
+
+    #[test]
+    fn ten_elements() {
+        let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
+        let mut sorted_vec = vec.clone();
+        sorted_vec.sort();
+        assert_eq!(quicksort(&mut vec), sorted_vec)
+    }
+
+    #[test]
+    fn ten_elements_with_duplicates() {
+        let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
+        let mut sorted_vec = vec.clone();
+        sorted_vec.sort();
+        assert_eq!(quicksort(&mut vec), sorted_vec)
+    }
 }
