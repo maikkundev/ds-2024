@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 pub fn bubblesort(arr: &mut Vec<i32>) -> Vec<i32> {
     // Iterate over each index
     for i in 0..(arr.len()) {
