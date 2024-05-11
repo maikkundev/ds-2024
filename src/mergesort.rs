@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 fn merge(vec: &mut Vec<i32>, start: usize, mid: usize, end: usize) {
     // Create left and right slices
     let left = vec[start..=mid].to_owned();
