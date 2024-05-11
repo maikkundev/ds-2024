@@ -1,14 +1,14 @@
-pub fn shellsort(arr: &mut Vec<i32>, size: usize) {
-    let mut interval = size / 2;
+pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
+    let mut interval = length / 2;
     while interval > 0 {
-        for i in interval..size {
-            let temp = arr[i];
+        for i in interval..length {
+            let temp = vec[i];
             let mut j = i;
-            while j >= interval && arr[j - interval] > temp {
-                arr[j] = arr[j - interval];
+            while j >= interval && vec[j - interval] > temp {
+                vec[j] = vec[j - interval];
                 j -= interval;
             }
-            arr[j] = temp;
+            vec[j] = temp;
         }
         interval /= 2;
     }
@@ -20,16 +20,16 @@ mod tests {
 
     #[test]
     fn shell_sort_test() {
-        let mut arr = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
-        let arr_len = arr.len();
-        let mut sorted_arr = arr.clone();
+        let mut vec = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
 
-        sorted_arr.sort();
-        println!("Original Array: {:?}", arr);
-        shellsort(&mut arr, arr_len);
-        println!("Sorted Array with Shell Sort: {:?}", arr);
-        println!("{:?}", sorted_arr);
+        sorted_vec.sort();
+        println!("Original Vec: {:?}", vec);
+        shellsort(&mut vec, length);
+        println!("Sorted Vec with Shell Sort: {:?}", vec);
+        println!("{:?}", sorted_vec);
 
-        assert_eq!(arr, sorted_arr);
+        assert_eq!(vec, sorted_vec);
     }
 }

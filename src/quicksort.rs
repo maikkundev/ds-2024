@@ -1,7 +1,7 @@
 // How it works: https://en.wikipedia.org/wiki/Quicksort
 // Rust Implementation: https://gist.github.com/lispandfound/96b9065bf240f94a0c0f
 fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
-    // If arr length is 0 or 1, return the vec
+    // If vec length is 0 or 1, return the vec
     if vec.len() <= 1 {
         println!("vec length {}", vec.len());
         return vec.to_owned();
