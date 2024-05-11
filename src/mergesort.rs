@@ -53,18 +53,46 @@ mod tests {
     use super::*;
 
     #[test]
-    fn merge_sort_test() {
-        let mut vec = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
-        let length = vec.len();
+    fn no_elements() {
+        let mut vec = vec![];
+        let end = vec.len() - 1;
         let mut sorted_vec = vec.clone();
 
         sorted_vec.sort();
-        mergesort(&mut vec, 0, length - 1);
-        print!(
-            "Array: {:?}, Sorted Vec with Merge Sort: {:?}",
-            vec, sorted_vec
-        );
+        mergesort(&mut vec, 0, end);
+        assert_eq!(vec, sorted_vec)
+    }
 
-        assert_eq!(vec, sorted_vec);
+    #[test]
+    fn one_element() {
+        let mut vec = vec![1];
+        let end = vec.len() - 1;
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        mergesort(&mut vec, 0, end);
+        assert_eq!(vec, sorted_vec)
+    }
+
+    #[test]
+    fn ten_elements() {
+        let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
+        let end = vec.len() - 1;
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        mergesort(&mut vec, 0, end);
+        assert_eq!(vec, sorted_vec)
+    }
+
+    #[test]
+    fn ten_elements_with_duplicates() {
+        let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
+        let end = vec.len() - 1;
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        mergesort(&mut vec, 0, end);
+        assert_eq!(vec, sorted_vec)
     }
 }
