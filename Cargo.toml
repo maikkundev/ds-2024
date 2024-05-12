@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
+plotters = "0.3.1"
 
 [[bin]]
 name = "bubblesort"
@@ -33,3 +34,7 @@ path = "src/shellsort.rs"
 [[bin]]
 name = "heapsort"
 path = "src/heapsort.rs"
+
+[[bin]]
+name = "plot"
+path = "src/plottings.rs"
