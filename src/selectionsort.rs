@@ -15,6 +15,8 @@ pub fn selectionsort(vec: &mut Vec<i32>) -> Vec<i32> {
     vec.to_owned()
 }
 
+fn main() {}
+
 #[cfg(test)]
 mod tests {
     use super::*;

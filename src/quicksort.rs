@@ -31,6 +31,8 @@ pub fn quicksort(vec: &mut Vec<i32>) -> Vec<i32> {
     partition(vec)
 }
 
+fn main() {}
+
 #[cfg(test)]
 mod tests {
     use super::*;

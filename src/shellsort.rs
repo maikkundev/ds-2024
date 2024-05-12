@@ -14,6 +14,8 @@ pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
     }
 }
 
+fn main() {}
+
 #[cfg(test)]
 mod tests {
     use super::*;

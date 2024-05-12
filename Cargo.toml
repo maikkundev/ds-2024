@@ -4,3 +4,32 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+rand = "0.8.5"
+
+[[bin]]
+name = "bubblesort"
+path = "src/bubblesort.rs"
+
+[[bin]]
+name = "quicksort"
+path = "src/quicksort.rs"
+
+[[bin]]
+name = "mergesort"
+path = "src/mergesort.rs"
+
+[[bin]]
+name = "selectionsort"
+path = "src/selectionsort.rs"
+
+[[bin]]
+name = "insertionsort"
+path = "src/insertionsort.rs"
+
+[[bin]]
+name = "shellsort"
+path = "src/shellsort.rs"
+
+[[bin]]
+name = "heapsort"
+path = "src/heapsort.rs"

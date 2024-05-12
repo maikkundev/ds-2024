@@ -46,6 +46,8 @@ pub fn mergesort(vec: &mut Vec<i32>, start: usize, end: usize) {
     }
 }
 
+fn main() {}
+
 #[cfg(test)]
 mod tests {
     use super::*;
