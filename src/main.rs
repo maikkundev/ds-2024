@@ -1,9 +1,18 @@
-mod bubblesort;
-mod heapsort;
-mod insertionsort;
-mod mergesort;
-mod quicksort;
-mod selectionsort;
-mod shellsort;
+// ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
+//
 
-fn main() {}
+use std::process::Command;
+
+use glob::glob;
+
+fn main() {
+    for file in glob("./*").expect("Failed to read glob pattern") {
+        Command::new("cargo")
+            .args([
+                "--bin",
+                file.unwrap().file_name().unwrap().to_str().unwrap(),
+            ])
+            .spawn()
+            .expect("Failed to spawn command");
+    }
+}

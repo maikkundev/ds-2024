@@ -2,7 +2,6 @@ use plotters::prelude::*;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{self, BufRead};
-use std::path::Path;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut results: HashMap<String, Vec<(i32, i32)>> = HashMap::new();

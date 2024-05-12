@@ -2,7 +2,6 @@ use rand::distributions::Uniform;
 use rand::prelude::*;
 use std::fs::OpenOptions;
 use std::io::Write;
-use std::ops::Div;
 use std::time::Instant;
 
 // How it works: https://en.wikipedia.org/wiki/Quicksort
