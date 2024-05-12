@@ -1,3 +1,10 @@
+use csv::ReaderBuilder;
+use serde::Deserialize;
+use std::error::Error;
+use std::fs::File;
+use std::io::Read;
+
+#[derive(Debug, Deserialize)]
 pub struct Record {
     id: i32,
     pub gender: String,
@@ -13,5 +20,17 @@ impl Record {
             first_name,
             last_name,
         }
+    }
+
+    pub fn import_records() -> Result<Vec<Record>, Box<dyn Error>> {
+        let mut rdr = ReaderBuilder::new().from_path("MOCK_DATA.csv")?;
+        let mut records = vec![];
+
+        for result in rdr.deserialize() {
+            let record: Record = result?;
+            records.push(record);
+        }
+
+        Ok(records)
     }
 }
