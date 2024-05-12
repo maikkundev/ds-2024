@@ -1,77 +1,194 @@
-use std::collections::BinaryHeap;
-
-/// Represents the `Heap`. It is by default a max-heap and cannot be turned into a min-heap.
+/// An implementation of a binary max-heap.
 #[derive(Debug)]
-pub struct Heap<T> {
+pub struct Heap<T>
+where
+    T: Ord + Copy,
+{
     data: Vec<T>,
 }
 
 impl<T> Heap<T>
 where
-    T: PartialOrd,
+    T: Ord + Copy,
 {
-    /// Creates a new `Heap` instance.
+    /// Creates an empty `Heap` instance.
+    ///
+    /// This will be a max-heap by default, and cannot be changed to a min-heap.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// let heap = Heap::new();
+    ///
+    /// // Prints: Heap []
+    /// println!("{:?}", heap);
+    /// ```
     pub fn new() -> Self {
         Self { data: Vec::new() }
     }
 
-    /// To insert an element to a heap, we perform the following steps:
-    /// 1. Add the element to the bottom level of the heap at the leftmost open space.
-    /// 2. Compare the added element with its parent; if they are in the correct order, stop.
-    /// 3. If not, swap the element with its parent and return to the previous step.
+    /// Pushes a value into the heap.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// let mut heap = Heap::new();
+    ///
+    /// heap.push(1);
+    /// heap.push(5);
+    /// heap.push(2);
+    ///
+    /// // Prints: Heap [5, 1, 2]
+    /// println!("{:?}", heap);
+    /// ```
     pub fn push(&mut self, value: T) {
-        let mut child_index = self.data.len() as isize;
-        // usize / usize produces a floored usize
-        let mut parent_index = (child_index - 1) / 2;
         self.data.push(value);
-        while child_index != 0 && self.data[child_index as usize] > self.data[parent_index as usize]
-        {
-            self.data.swap(child_index as usize, parent_index as usize);
-            child_index = parent_index;
-            parent_index = (child_index - 1) / 2;
+        let mut last_index = self.len() - 1;
+
+        while last_index != 0 {
+            let parent_index = self.parent(last_index);
+
+            if self.data[last_index] > self.data[parent_index] {
+                self.data.swap(last_index, parent_index)
+            }
+
+            last_index = parent_index;
         }
     }
 
-    /// The procedure for deleting the root from the heap (effectively extracting the maximum element in a max-heap or the minimum element in a min-heap) while retaining the heap property is as follows:
-    /// 1. Replace the root of the heap with the last element on the last level.
-    /// 2. Compare the new root with its children; if they are in the correct order, stop.
-    /// 3. If not, swap the element with one of its children and return to the previous step. (Swap with its smaller child in a min-heap and its larger child in a max-heap.)
+    /// Pops the greatest value from the heap returns it wrapped in an `Option`.
+    ///
+    /// If the heap is empty, returns `None`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// let mut heap = Heap::new();
+    ///
+    /// heap.push(1);
+    /// heap.push(5);
+    /// heap.push(2);
+    ///
+    /// // Prints: Heap [5, 1, 2]
+    /// println!("{:?}", heap);
+    /// heap.pop();
+    ///
+    /// // Prints: Heap [2, 1]
+    /// println!("{:?}", heap)
+    /// ```
     pub fn pop(&mut self) -> Option<T> {
-        // Return `None` is the vec is empty
-        if self.data.is_empty() {
-            return None;
-        }
-        // Get the index of the last element and swap it with the root element (1)
-        let last_el = self.data.len() - 1;
-        self.data.swap(0, last_el);
-        // Get value to return
-        let result = Some(self.data.remove(last_el));
+        match self.len() {
+            n if n == 0 => None,
+            n if n == 1 => self.data.pop(),
+            _ => {
+                // Set last as the last index in the vec
+                let last = self.data.len() - 1;
+                // Swap last and root
+                self.data.swap(0, last);
+                // Set result as the last element
+                let result = self.data.pop().unwrap();
 
-        while 
-        {
-            self.data.swap(child_index as usize, parent_index as usize);
-            child_index = parent_index;
-            parent_index = (child_index - 1) / 2;
+                // Heapify
+                self.heapify(0);
+
+                // Return the result
+                Some(result)
+            }
         }
-        // Return the removed element
-        result
     }
 
-    pub fn sort(&mut self) -> Vec<T> {
-        vec![]
+    /// Returns the heap as a sorted `Vec`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// let mut heap = Heap::new();
+    ///
+    /// heap.push(1);
+    /// heap.push(5);
+    /// heap.push(2);
+    ///
+    /// // Prints: Heap [5, 1, 2]
+    /// println!("{:?}", heap);
+    ///
+    /// // Prints: [1, 2, 5]
+    /// println!("{:?}", heap.into_sorted_vec());
+    /// ```
+    pub fn into_sorted_vec(&mut self) -> Vec<T> {
+        let mut vec = vec![];
+        // Pushed the popped elements of the heap to the vec, while the vec isn't empty
+        while self.len() > 0 {
+            vec.push(self.pop().unwrap());
+        }
+        // Reverses the vec, since the heap is by default a max-heap
+        vec.reverse();
+        // Returns the vec
+        vec
     }
-}
 
-//
-fn heapsort(vec: &mut Vec<i32>) -> Vec<i32> {
-    vec![]
+    /// Returns the length of the heap.
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
+
+    /// Takes a `Vec` and an index, and turns it into a `Heap`.
+    fn heapify(&mut self, index: usize) {
+        let mut current = index;
+
+        loop {
+            let left = self.left(current);
+            let right = self.right(current);
+            let size = self.len() - 1;
+
+            if left > size || right > size {
+                break;
+            }
+
+            let max = self.get_max_index(left, right, current);
+
+            if max != current {
+                self.data.swap(current, max);
+
+                current = max;
+            } else {
+                break;
+            }
+        }
+    }
+
+    /// Returns the max index from three given indexes.
+    fn get_max_index(&self, left_index: usize, right_index: usize, current_index: usize) -> usize {
+        let max = self.data[left_index]
+            .max(self.data[right_index])
+            .max(self.data[current_index]);
+
+        match max {
+            i if i == self.data[current_index] => current_index,
+            i if i == self.data[right_index] => right_index,
+            _ => left_index,
+        }
+    }
+
+    /// Returns the parent index.
+    fn parent(&self, index: usize) -> usize {
+        (index - 1) / 2
+    }
+
+    /// Returns the left child.
+    fn left(&self, index: usize) -> usize {
+        2 * index + 1
+    }
+
+    /// Returns the right child.
+    fn right(&self, index: usize) -> usize {
+        2 * index + 2
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use std::collections::binary_heap;
-
     use super::*;
+    use std::collections::BinaryHeap;
 
     #[test]
     fn test_push() {
@@ -82,8 +199,7 @@ mod tests {
             heap.push(x);
             binary_heap.push(x)
         });
-        // println!("{:?}", heap);
-        // println!("{:?}", binary_heap);
+        // assert_eq!(heap, binary_heap);
     }
 
     #[test]
@@ -95,14 +211,20 @@ mod tests {
             heap.push(x);
             binary_heap.push(x)
         });
-        println!("Before pop {:?}", heap);
         heap.pop();
-        println!("After pop {:?}", heap);
-        println!("Before pop {:?}", binary_heap);
         binary_heap.pop();
-        println!("After pop {:?}", binary_heap);
+        // assert_eq!(heap, binary_heap);
+    }
 
-        // [36, 10, 31, 2, 5, 8, 2, 5]
-        // [36, 31, 10, 5, 2, 5, 8, 2]
+    #[test]
+    fn test_into_sorted_vec() {
+        let vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
+        let mut heap = Heap::new();
+        let mut binary_heap = BinaryHeap::new();
+        vec.iter().for_each(|x| {
+            heap.push(x);
+            binary_heap.push(x)
+        });
+        // assert_eq!(heap.into_sorted_vec(), binary_heap.into_sorted_vec());
     }
 }

@@ -3,7 +3,6 @@
 fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
     // If vec length is 0 or 1, return the vec
     if vec.len() <= 1 {
-        println!("vec length {}", vec.len());
         return vec.to_owned();
     }
     // Create the two sub-arrays
@@ -21,8 +20,6 @@ fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
     }
     // Push pivot into right slice
     right.push(vec[0]);
-    println!("left slice {:?}", left);
-    println!("right slice {:?}", right);
     // Partitioned left and right slices
     let mut part_left = partition(&mut left);
     let mut part_right = partition(&mut right);
