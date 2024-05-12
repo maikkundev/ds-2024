@@ -1,14 +1,14 @@
-pub fn shellsort(arr: &mut Vec<i32>, size: usize) {
-    let mut interval = size / 2;
+pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
+    let mut interval = length / 2;
     while interval > 0 {
-        for i in interval..size {
-            let temp = arr[i];
+        for i in interval..length {
+            let temp = vec[i];
             let mut j = i;
-            while j >= interval && arr[j - interval] > temp {
-                arr[j] = arr[j - interval];
+            while j >= interval && vec[j - interval] > temp {
+                vec[j] = vec[j - interval];
                 j -= interval;
             }
-            arr[j] = temp;
+            vec[j] = temp;
         }
         interval /= 2;
     }
@@ -19,17 +19,46 @@ mod tests {
     use super::*;
 
     #[test]
-    fn shell_sort_test() {
-        let mut arr = vec![5, 3, 8, 4, 2, 6, 9, 1, 7];
-        let arr_len = arr.len();
-        let mut sorted_arr = arr.clone();
+    fn no_elements() {
+        let mut vec = vec![];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
 
-        sorted_arr.sort();
-        println!("Original Array: {:?}", arr);
-        shellsort(&mut arr, arr_len);
-        println!("Sorted Array with Shell Sort: {:?}", arr);
-        println!("{:?}", sorted_arr);
+        sorted_vec.sort();
+        shellsort(&mut vec, length);
+        assert_eq!(vec, sorted_vec)
+    }
 
-        assert_eq!(arr, sorted_arr);
+    #[test]
+    fn one_element() {
+        let mut vec = vec![1];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        shellsort(&mut vec, length);
+        assert_eq!(vec, sorted_vec);
+    }
+
+    #[test]
+    fn ten_elements() {
+        let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        shellsort(&mut vec, length);
+        assert_eq!(vec, sorted_vec);
+    }
+
+    #[test]
+    fn ten_elements_with_duplicates() {
+        let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
+        let length = vec.len();
+        let mut sorted_vec = vec.clone();
+
+        sorted_vec.sort();
+        shellsort(&mut vec, length);
+        assert_eq!(vec, sorted_vec);
     }
 }
