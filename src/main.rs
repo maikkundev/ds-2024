@@ -1,4 +1,5 @@
 mod bubblesort;
+mod insertionsort;
 mod heapsort;
 mod mergesort;
 mod quicksort;
@@ -6,6 +7,7 @@ mod selectionsort;
 mod shellsort;
 
 use bubblesort::bubblesort;
+use insertionsort::insertionsort;
 use mergesort::mergesort;
 use quicksort::quicksort;
 use selectionsort::selectionsort;
@@ -28,6 +30,8 @@ fn main() {
     println!("{:?}", quicksort(&mut vec));
     println!("{:?}", merge_vec);
     println!("{:?}", selectionsort(&mut vec));
+    println!("{:?}", insertionsort(&mut vec));
+    println!("{:?}", shellsort(&mut vec, length));
     println!("{:?}", shell_vec);
     println!("{:?}", heap.into_sorted_vec());
 }
