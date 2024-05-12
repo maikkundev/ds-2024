@@ -133,23 +133,31 @@ where
 
     /// Takes a `Vec` and an index, and turns it into a `Heap`.
     fn heapify(&mut self, index: isize) {
+        // Set current to index and make it mutable.
         let mut current = index;
 
+        // Start a loop
         loop {
+            // Call left and right functions to get the left and right children
             let left = self.left(current);
             let right = self.right(current);
-            let size = self.len() - 1;
+            // Get the size of the vec
+            let size = (self.len() - 1) as isize;
 
-            if left as usize > size || right as usize > size {
+            // Break if out of bounds
+            if left > size || right > size {
                 break;
             }
 
+            // Get the max value between root and children
             let max = self.get_max_index(left, right, current);
 
+            // Swap the current and max value if they're not equal, and set the value of current to max's value
             if max != current {
                 self.data.swap(current as usize, max as usize);
 
                 current = max;
+            // Break if they're equal
             } else {
                 break;
             }
