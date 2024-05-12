@@ -1,3 +1,7 @@
+use rand::distributions::Uniform;
+use rand::prelude::*;
+use std::time::Instant;
+
 pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
     let mut interval = length / 2;
     while interval > 0 {
@@ -14,7 +18,25 @@ pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
     }
 }
 
-fn main() {}
+fn main() {
+    let rng = rand::thread_rng();
+
+    let dist = Uniform::from(0..=1e6 as i32);
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let data: Vec<i32> = rng.clone().sample_iter(&dist).take(size).collect();
+            let start = Instant::now();
+            shellsort(&mut data.clone(), data.len());
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        println!(
+            "[SHELLSORT] Integers: {} - Average Time: {:?}μs",
+            size, average
+        );
+    }
+}
 
 #[cfg(test)]
 mod tests {
