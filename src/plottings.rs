@@ -1,4 +1,5 @@
 use plotters::prelude::*;
+use plotters::style::full_palette::{GREY_A100, GREY_A200, GREY_A400};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -23,7 +24,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let root = BitMapBackend::new("plot.png", (640, 480)).into_drawing_area();
-    root.fill(&WHITE)?;
+    root.fill(&GREY_A200)?;
 
     let mut chart = ChartBuilder::on(&root)
         .caption(
@@ -33,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .margin(5)
         .x_label_area_size(32)
         .y_label_area_size(50)
-        .build_cartesian_2d(100i32..1000, 0i32..600)?;
+        .build_cartesian_2d(100i32..1000, 0i32..700)?;
 
     chart
         .configure_mesh()
