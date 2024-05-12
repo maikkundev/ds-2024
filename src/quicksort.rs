@@ -1,3 +1,8 @@
+use rand::distributions::Uniform;
+use rand::prelude::*;
+use std::ops::Div;
+use std::time::Instant;
+
 // How it works: https://en.wikipedia.org/wiki/Quicksort
 // Rust Implementation: https://gist.github.com/lispandfound/96b9065bf240f94a0c0f
 fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
@@ -31,7 +36,25 @@ pub fn quicksort(vec: &mut Vec<i32>) -> Vec<i32> {
     partition(vec)
 }
 
-fn main() {}
+fn main() {
+    let rng = rand::thread_rng();
+
+    let dist = Uniform::from(0..=1e6 as i32);
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data: Vec<i32> = rng.clone().sample_iter(&dist).take(size).collect();
+            let start = Instant::now();
+            quicksort(&mut data);
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        println!(
+            "[QUICKSORT] Integers: {} - Average Time: {:?}μs",
+            size, average
+        );
+    }
+}
 
 #[cfg(test)]
 mod tests {

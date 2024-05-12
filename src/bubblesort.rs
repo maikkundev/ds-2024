@@ -18,19 +18,21 @@ pub fn bubblesort(vec: &mut Vec<i32>) -> Vec<i32> {
 
 fn main() {
     let rng = rand::thread_rng();
-    let mut vec: Vec<i32> = Vec::new();
 
     let dist = Uniform::from(0..=1e6 as i32);
-    let data: Vec<Vec<i32>> = (100..=1000)
-        .step_by(100)
-        .map(|size| rng.clone().sample_iter(dist).take(size).collect())
-        .collect();
-    for data in data {
-        let length = data.len();
-        let start = Instant::now();
-        bubblesort(&mut vec);
-        let duration = start.elapsed().as_nanos();
-        println!("[BUBBLESORT] Integers: {} - Time: {:?}ns", length, duration)
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data: Vec<i32> = rng.clone().sample_iter(&dist).take(size).collect();
+            let start = Instant::now();
+            bubblesort(&mut data);
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        println!(
+            "[BUBBLESORT] Integers: {} - Average Time: {:?}μs",
+            size, average
+        );
     }
 }
 
