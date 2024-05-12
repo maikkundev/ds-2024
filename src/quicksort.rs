@@ -1,7 +1,7 @@
 // ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
-// Creation: March 9
+// Creation: April 1
 // Update: May 12
-// cargo run --bin ds-2024
+// cargo run --bin quicksort
 
 use rand::distributions::Uniform;
 use rand::prelude::*;

@@ -1,3 +1,8 @@
+// ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
+// Creation: March 30
+// Update: May 12
+// cargo run --bin shellsort
+
 use rand::distributions::Uniform;
 use rand::prelude::*;
 use std::fs::OpenOptions;

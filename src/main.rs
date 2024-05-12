@@ -1,5 +1,7 @@
 // ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
-//
+// Creation: March 9
+// Update: May 12
+// cargo run --bin ds-2024
 
 use glob::glob;
 use std::process::Command;
