@@ -1,17 +1,17 @@
 pub struct Record {
     id: i32,
-    pub string1: String,
-    pub string2: String,
-    pub string3: String,
+    pub gender: String,
+    pub first_name: String,
+    pub last_name: String,
 }
 
 impl Record {
-    fn new(&self, id: i32, string1: String, string2: String, string3: String) -> Self {
+    fn new(&self, id: i32, gender: String, first_name: String, last_name: String) -> Self {
         Self {
             id,
-            string1,
-            string2,
-            string3,
+            gender,
+            first_name,
+            last_name,
         }
     }
 }
