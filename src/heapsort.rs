@@ -1,4 +1,4 @@
-/// An implementation of a binary max-heap.
+/// Represents a binary max-heap.
 #[derive(Debug)]
 pub struct Heap<T>
 where
@@ -7,6 +7,7 @@ where
     data: Vec<T>,
 }
 
+/// Implementation of a binary max-heap.
 impl<T> Heap<T>
 where
     T: Ord + Copy,
