@@ -2,7 +2,7 @@
 #[derive(Debug)]
 pub struct Heap<T>
 where
-    T: Ord + Copy,
+    T: PartialOrd + Copy,
 {
     data: Vec<T>,
 }
@@ -43,13 +43,13 @@ where
     /// ```
     pub fn push(&mut self, value: T) {
         self.data.push(value);
-        let mut last_index = self.len() - 1;
+        let mut last_index = (self.len() - 1) as isize;
 
         while last_index != 0 {
             let parent_index = self.parent(last_index);
 
-            if self.data[last_index] > self.data[parent_index] {
-                self.data.swap(last_index, parent_index)
+            if self.data[last_index as usize] > self.data[parent_index as usize] {
+                self.data.swap(last_index as usize, parent_index as usize)
             }
 
             last_index = parent_index;
@@ -132,7 +132,7 @@ where
     }
 
     /// Takes a `Vec` and an index, and turns it into a `Heap`.
-    fn heapify(&mut self, index: usize) {
+    fn heapify(&mut self, index: isize) {
         let mut current = index;
 
         loop {
@@ -140,14 +140,14 @@ where
             let right = self.right(current);
             let size = self.len() - 1;
 
-            if left > size || right > size {
+            if left as usize > size || right as usize > size {
                 break;
             }
 
             let max = self.get_max_index(left, right, current);
 
             if max != current {
-                self.data.swap(current, max);
+                self.data.swap(current as usize, max as usize);
 
                 current = max;
             } else {
@@ -157,30 +157,30 @@ where
     }
 
     /// Returns the max index from three given indexes.
-    fn get_max_index(&self, left_index: usize, right_index: usize, current_index: usize) -> usize {
-        let max = self.data[left_index]
-            .max(self.data[right_index])
-            .max(self.data[current_index]);
+    fn get_max_index(&self, left_index: isize, right_index: isize, current_index: isize) -> isize {
+        let max = self.data[left_index as usize]
+            .max(self.data[right_index as usize])
+            .max(self.data[current_index as usize]);
 
         match max {
-            i if i == self.data[current_index] => current_index,
-            i if i == self.data[right_index] => right_index,
+            i if i == self.data[current_index as usize] => current_index,
+            i if i == self.data[right_index as usize] => right_index,
             _ => left_index,
         }
     }
 
     /// Returns the parent index.
-    fn parent(&self, index: usize) -> usize {
+    fn parent(&self, index: isize) -> isize {
         (index - 1) / 2
     }
 
     /// Returns the left child.
-    fn left(&self, index: usize) -> usize {
+    fn left(&self, index: isize) -> isize {
         2 * index + 1
     }
 
     /// Returns the right child.
-    fn right(&self, index: usize) -> usize {
+    fn right(&self, index: isize) -> isize {
         2 * index + 2
     }
 }
