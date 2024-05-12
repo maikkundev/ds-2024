@@ -1,3 +1,7 @@
+use rand::distributions::Uniform;
+use rand::prelude::*;
+use std::time::Instant;
+
 /// Represents a binary max-heap.
 #[derive(Debug)]
 pub struct Heap<T>
@@ -5,6 +9,21 @@ where
     T: Ord + Copy,
 {
     data: Vec<T>,
+}
+
+// Implementation of FromIterator trait for Heap struct.
+impl<T, A> FromIterator<A> for Heap<T>
+where
+    T: Ord + Copy,
+    A: Into<T>,
+{
+    fn from_iter<I: IntoIterator<Item = A>>(iter: I) -> Self {
+        let mut heap = Heap::new();
+        for item in iter {
+            heap.push(item.into());
+        }
+        heap
+    }
 }
 
 /// Implementation of a binary max-heap.
@@ -199,7 +218,25 @@ where
     }
 }
 
-fn main() {}
+fn main() {
+    let rng = rand::thread_rng();
+
+    let dist = Uniform::from(0..=1e6 as i32);
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data: Heap<i32> = rng.clone().sample_iter(&dist).take(size).collect();
+            let start = Instant::now();
+            data.into_sorted_vec();
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        println!(
+            "[HEAPSORT] Integers: {} - Average Time: {:?}μs",
+            size, average
+        );
+    }
+}
 
 #[cfg(test)]
 mod tests {
