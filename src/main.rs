@@ -3,6 +3,8 @@
 // Update: May 12
 // cargo run --bin ds-2024
 
+pub mod record;
+
 use glob::glob;
 use std::process::Command;
 
