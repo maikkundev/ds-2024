@@ -3,20 +3,24 @@
 // Update: May 12
 // cargo run --bin shellsort
 
+mod record;
+
 use rand::distributions::Uniform;
 use rand::prelude::*;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-pub fn shellsort<T: PartialOrd>(vec: &mut Vec<T>, length: usize) {
+use crate::record::Record;
+
+pub fn shellsort<T: PartialOrd + Clone>(vec: &mut Vec<T>, length: usize) {
     let mut interval = length / 2;
     while interval > 0 {
         for i in interval..length {
-            let temp = vec[i];
+            let temp = vec[i].clone();
             let mut j = i;
             while j >= interval && vec[j - interval] > temp {
-                vec[j] = vec[j - interval];
+                vec[j] = vec[j - interval].clone();
                 j -= interval;
             }
             vec[j] = temp;
@@ -54,6 +58,22 @@ fn main() {
         if let Err(e) = writeln!(file, "{}", output) {
             eprintln!("Couldn't write to file: {}", e);
         }
+    }
+
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data = Record::create_rand_vec(size);
+            let start = Instant::now();
+            shellsort(&mut data.clone(), data.len());
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        let output = format!(
+            "[SHELLSORT] Records: {} - Average Time: {:?}μs",
+            size, average
+        );
+        println!("{}", output);
     }
 }
 

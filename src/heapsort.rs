@@ -9,19 +9,19 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-trait MaxExt: PartialOrd + Copy {
+trait MaxExt: PartialOrd + Copy + Clone {
     fn max(&self, other: &Self) -> Self {
         return if self > other { *self } else { *other };
     }
 }
 
-impl<T: PartialOrd + Copy> MaxExt for T {}
+impl<T: PartialOrd + Copy + Clone> MaxExt for T {}
 
 /// Represents a binary max-heap.
 #[derive(Debug)]
 pub struct Heap<T>
 where
-    T: PartialOrd + Copy,
+    T: PartialOrd + Copy + Clone,
 {
     data: Vec<T>,
 }
@@ -29,7 +29,7 @@ where
 // Implementation of FromIterator trait for Heap struct.
 impl<T, A> FromIterator<A> for Heap<T>
 where
-    T: PartialOrd + Copy,
+    T: PartialOrd + Copy + Clone,
     A: Into<T>,
 {
     fn from_iter<I: IntoIterator<Item = A>>(iter: I) -> Self {

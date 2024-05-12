@@ -3,11 +3,15 @@
 // Update: May 12
 // cargo run --bin selectionsort
 
+mod record;
+
 use rand::distributions::Uniform;
 use rand::prelude::*;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
+
+use crate::record::Record;
 
 pub fn selectionsort<T: PartialOrd>(vec: &mut Vec<T>) {
     // Loop over the length of the vec
@@ -53,6 +57,22 @@ fn main() {
         if let Err(e) = writeln!(file, "{}", output) {
             eprintln!("Couldn't write to file: {}", e);
         }
+    }
+
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data = Record::create_rand_vec(size);
+            let start = Instant::now();
+            selectionsort(&mut data);
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        let output = format!(
+            "[SELECTIONSORT] Records: {} - Average Time: {:?}μs",
+            size, average
+        );
+        println!("{}", output);
     }
 }
 

@@ -3,32 +3,35 @@
 // Update: May 12
 // cargo run --bin quicksort
 
+mod record;
+use crate::record::Record;
+
 use rand::distributions::Uniform;
 use rand::prelude::*;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
+fn partition<T: PartialOrd + Clone>(vec: &mut Vec<T>) -> Vec<T> {
     // If vec length is 0 or 1, return the vec
     if vec.len() <= 1 {
-        return vec.to_owned();
+        return vec.to_vec();
     }
     // Create the two sub-arrays
     // Do so by comparing the value of the pivot to the one an index before - see if the pivot is a higher value than the
     // other index's value.
-    let mut left: Vec<i32> = Vec::new();
-    let mut right: Vec<i32> = Vec::new();
+    let mut left: Vec<T> = Vec::new();
+    let mut right: Vec<T> = Vec::new();
     // Loop through the vec and
     for el in &vec[1..] {
         if *el <= vec[0] {
-            left.push(*el)
+            left.push(el.clone())
         } else {
-            right.push(*el)
+            right.push(el.clone())
         }
     }
     // Push pivot into right slice
-    right.push(vec[0]);
+    right.push(vec[0].clone());
     // Partitioned left and right slices
     let mut part_left = partition(&mut left);
     let mut part_right = partition(&mut right);
@@ -36,7 +39,7 @@ fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
     part_left
 }
 
-pub fn quicksort(vec: &mut Vec<i32>) -> Vec<i32> {
+pub fn quicksort<T: PartialOrd + Clone>(vec: &mut Vec<T>) -> Vec<T> {
     partition(vec)
 }
 
@@ -70,6 +73,22 @@ fn main() {
             eprintln!("Couldn't write to file: {}", e);
         }
     }
+
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data = Record::create_rand_vec(size);
+            let start = Instant::now();
+            quicksort(&mut data);
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        let output = format!(
+            "[QUICKSORT] Records: {} - Average Time: {:?}μs",
+            size, average
+        );
+        println!("{}", output);
+    }
 }
 
 #[cfg(test)]
@@ -78,7 +97,7 @@ mod tests {
 
     #[test]
     fn no_elements() {
-        let mut vec = vec![];
+        let mut vec: Vec<i32> = vec![];
         assert_eq!(quicksort(&mut vec), [])
     }
 
@@ -92,6 +111,7 @@ mod tests {
     fn ten_elements() {
         let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
         let mut sorted_vec = vec.clone();
+
         sorted_vec.sort();
         assert_eq!(quicksort(&mut vec), sorted_vec)
     }
@@ -100,6 +120,7 @@ mod tests {
     fn ten_elements_with_duplicates() {
         let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
         let mut sorted_vec = vec.clone();
+
         sorted_vec.sort();
         assert_eq!(quicksort(&mut vec), sorted_vec)
     }

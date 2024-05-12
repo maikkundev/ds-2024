@@ -3,8 +3,11 @@
 // Update: May 12
 // cargo run --bin bubblesort
 
+mod record;
+
 use rand::distributions::Uniform;
 use rand::prelude::*;
+use record::Record;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
@@ -51,6 +54,22 @@ fn main() {
             eprintln!("Couldn't write to file: {}", e);
         }
     }
+
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data = Record::create_rand_vec(size);
+            let start = Instant::now();
+            bubblesort(&mut data);
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        let output = format!(
+            "[BUBBLESORT] Records: {} - Average Time: {:?}μs",
+            size, average
+        );
+        println!("{}", output);
+    }
 }
 
 #[cfg(test)]
@@ -75,15 +94,19 @@ mod tests {
     fn ten_elements() {
         let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
         let mut sorted_vec = vec.clone();
+
+        bubblesort(&mut vec);
         sorted_vec.sort();
-        assert_eq!(bubblesort(&mut vec), sorted_vec)
+        assert_eq!(vec, sorted_vec)
     }
 
     #[test]
     fn ten_elements_with_duplicates() {
         let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
         let mut sorted_vec = vec.clone();
+
+        bubblesort(&mut vec);
         sorted_vec.sort();
-        assert_eq!(bubblesort(&mut vec), sorted_vec)
+        assert_eq!(vec, sorted_vec)
     }
 }
