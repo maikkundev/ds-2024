@@ -58,9 +58,9 @@ fn main() {
     let dist = Uniform::from(0..=1e6 as i32);
 
     let mut file = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open("mergesort_results.txt")
+        .append(true) // Open the file in append mode
+        .create(true) // Create the file if it does not exist
+        .open("results.txt")
         .unwrap();
 
     for size in (100..=1000).step_by(100) {

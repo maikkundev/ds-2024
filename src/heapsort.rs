@@ -1,5 +1,7 @@
 use rand::distributions::Uniform;
 use rand::prelude::*;
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::time::Instant;
 
 /// Represents a binary max-heap.
@@ -222,6 +224,13 @@ fn main() {
     let rng = rand::thread_rng();
 
     let dist = Uniform::from(0..=1e6 as i32);
+
+    let mut file = OpenOptions::new()
+        .append(true) // Open the file in append mode
+        .create(true) // Create the file if it does not exist
+        .open("results.txt")
+        .unwrap();
+
     for size in (100..=1000).step_by(100) {
         let mut duration_vec = vec![];
         for _ in 0..100 {
@@ -231,10 +240,15 @@ fn main() {
             duration_vec.push(start.elapsed().as_micros());
         }
         let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
-        println!(
+        let output = format!(
             "[HEAPSORT] Integers: {} - Average Time: {:?}μs",
             size, average
         );
+        println!("{}", output);
+
+        if let Err(e) = writeln!(file, "{}", output) {
+            eprintln!("Couldn't write to file: {}", e);
+        }
     }
 }
 
