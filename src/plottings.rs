@@ -43,12 +43,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut color_index = 0;
     for (algorithm, data) in &results {
-        let color = Palette99::pick(color_index).to_rgba(); // Convert to RGBAColor
+        let color = Palette99::pick(color_index).to_rgba();
         chart
-            .draw_series(LineSeries::new(
-                data.iter().map(|(x, y)| (*x, *y)), // Corrected to (*x, *y)
-                color,
-            ))?
+            .draw_series(LineSeries::new(data.iter().map(|(x, y)| (*x, *y)), color))?
             .label(algorithm)
             .legend(move |(x, y)| PathElement::new(vec![(x, y), (x + 20, y)], color));
         color_index += 1;
