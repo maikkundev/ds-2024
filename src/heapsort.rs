@@ -2,14 +2,14 @@
 #[derive(Debug)]
 pub struct Heap<T>
 where
-    T: PartialEq + Ord + Copy,
+    T: Ord + Copy,
 {
     data: Vec<T>,
 }
 
 impl<T> Heap<T>
 where
-    T: PartialEq + Ord + Copy,
+    T: Ord + Copy,
 {
     /// Creates an empty `Heap` instance.
     ///
