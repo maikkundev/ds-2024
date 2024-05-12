@@ -1,37 +1,26 @@
-mod bubblesort;
-mod insertionsort;
-mod heapsort;
-mod mergesort;
-mod quicksort;
-mod selectionsort;
-mod shellsort;
+// ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
+// Creation: March 9
+// Update: May 12
+// cargo run --bin ds-2024
 
-use bubblesort::bubblesort;
-use insertionsort::insertionsort;
-use mergesort::mergesort;
-use quicksort::quicksort;
-use selectionsort::selectionsort;
-use shellsort::shellsort;
+pub mod record;
 
-use crate::heapsort::Heap;
+use glob::glob;
+use std::process::Command;
 
 fn main() {
-    let mut vec = vec![1, 3, 5, 7, 1, 9, 3, 3, 4, 1, 12, 3];
-    let length = vec.len();
-    let mut merge_vec = vec.clone();
-    let mut shell_vec = vec.clone();
-    mergesort(&mut merge_vec, 0, length - 1);
-    shellsort(&mut shell_vec, length);
-
-    let mut heap: Heap<i32> = Heap::new();
-    vec.iter().for_each(|x| heap.push(*x));
-
-    println!("{:?}", bubblesort(&mut vec));
-    println!("{:?}", quicksort(&mut vec));
-    println!("{:?}", merge_vec);
-    println!("{:?}", selectionsort(&mut vec));
-    println!("{:?}", insertionsort(&mut vec));
-    println!("{:?}", shellsort(&mut vec, length));
-    println!("{:?}", shell_vec);
-    println!("{:?}", heap.into_sorted_vec());
+    for entry in glob("./*.rs").expect("Failed to read glob pattern") {
+        match entry {
+            Ok(path) => {
+                let file_name = path.file_stem().unwrap().to_str().unwrap();
+                if file_name != "main" && file_name != "plottings" {
+                    Command::new("cargo")
+                        .args(["run", "--bin", file_name, "--release"])
+                        .status()
+                        .expect("Failed to execute command");
+                }
+            }
+            Err(e) => println!("{:?}", e),
+        }
+    }
 }

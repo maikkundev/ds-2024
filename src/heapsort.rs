@@ -1,12 +1,39 @@
-/// An implementation of a binary max-heap.
+// ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
+// Creation: April 1
+// Update: May 12
+// cargo run --bin heapsort
+
+use rand::distributions::Uniform;
+use rand::prelude::*;
+use std::fs::OpenOptions;
+use std::io::Write;
+use std::time::Instant;
+
+/// Represents a binary max-heap.
 #[derive(Debug)]
 pub struct Heap<T>
 where
-    T: PartialOrd + Copy,
+    T: Ord + Copy,
 {
     data: Vec<T>,
 }
 
+// Implementation of FromIterator trait for Heap struct.
+impl<T, A> FromIterator<A> for Heap<T>
+where
+    T: Ord + Copy,
+    A: Into<T>,
+{
+    fn from_iter<I: IntoIterator<Item = A>>(iter: I) -> Self {
+        let mut heap = Heap::new();
+        for item in iter {
+            heap.push(item.into());
+        }
+        heap
+    }
+}
+
+/// Implementation of a binary max-heap.
 impl<T> Heap<T>
 where
     T: Ord + Copy,
@@ -131,6 +158,11 @@ where
         self.data.len()
     }
 
+    // Returns the heap as a vec.
+    pub fn to_vec(&self) -> Vec<T> {
+        self.data.to_owned()
+    }
+
     /// Takes a `Vec` and an index, and turns it into a `Heap`.
     fn heapify(&mut self, index: isize) {
         // Set current to index and make it mutable.
@@ -193,46 +225,75 @@ where
     }
 }
 
+fn main() {
+    let rng = rand::thread_rng();
+
+    let dist = Uniform::from(0..=1e6 as i32);
+
+    let mut file = OpenOptions::new()
+        .append(true) // Open the file in append mode
+        .create(true) // Create the file if it does not exist
+        .open("results.txt")
+        .unwrap();
+
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let mut data: Heap<i32> = rng.clone().sample_iter(&dist).take(size).collect();
+            let start = Instant::now();
+            data.into_sorted_vec();
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        let output = format!(
+            "[HEAPSORT] Integers: {} - Average Time: {:?}μs",
+            size, average
+        );
+        println!("{}", output);
+
+        if let Err(e) = writeln!(file, "{}", output) {
+            eprintln!("Couldn't write to file: {}", e);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::collections::BinaryHeap;
 
     #[test]
-    fn test_push() {
-        let vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
-        let mut heap = Heap::new();
-        let mut binary_heap = BinaryHeap::new();
-        vec.iter().for_each(|x| {
-            heap.push(x);
-            binary_heap.push(x)
-        });
-        // assert_eq!(heap, binary_heap);
+    fn no_elements() {
+        let heap: Heap<i32> = Heap::new();
+        assert_eq!(heap.to_vec(), [])
     }
 
     #[test]
-    fn test_pop() {
-        let vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
+    fn one_element() {
+        let vec = vec![1];
         let mut heap = Heap::new();
-        let mut binary_heap = BinaryHeap::new();
-        vec.iter().for_each(|x| {
-            heap.push(x);
-            binary_heap.push(x)
-        });
-        heap.pop();
-        binary_heap.pop();
-        // assert_eq!(heap, binary_heap);
+        heap.push(1);
+        assert_eq!(heap.to_vec(), vec);
     }
 
     #[test]
-    fn test_into_sorted_vec() {
-        let vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
+    fn test_ten_elements() {
+        let mut vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
         let mut heap = Heap::new();
-        let mut binary_heap = BinaryHeap::new();
         vec.iter().for_each(|x| {
-            heap.push(x);
-            binary_heap.push(x)
+            heap.push(*x);
         });
-        // assert_eq!(heap.into_sorted_vec(), binary_heap.into_sorted_vec());
+        vec.sort();
+        assert_eq!(heap.into_sorted_vec(), vec);
+    }
+
+    #[test]
+    fn ten_elements_with_duplicates() {
+        let mut vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
+        let mut heap = Heap::new();
+        vec.iter().for_each(|x| {
+            heap.push(*x);
+        });
+        vec.sort();
+        assert_eq!(heap.into_sorted_vec(), vec);
     }
 }

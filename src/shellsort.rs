@@ -1,3 +1,14 @@
+// ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
+// Creation: March 30
+// Update: May 12
+// cargo run --bin shellsort
+
+use rand::distributions::Uniform;
+use rand::prelude::*;
+use std::fs::OpenOptions;
+use std::io::Write;
+use std::time::Instant;
+
 pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
     let mut interval = length / 2;
     while interval > 0 {
@@ -11,6 +22,38 @@ pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
             vec[j] = temp;
         }
         interval /= 2;
+    }
+}
+
+fn main() {
+    let rng = rand::thread_rng();
+
+    let dist = Uniform::from(0..=1e6 as i32);
+
+    let mut file = OpenOptions::new()
+        .append(true) // Open the file in append mode
+        .create(true) // Create the file if it does not exist
+        .open("results.txt")
+        .unwrap();
+
+    for size in (100..=1000).step_by(100) {
+        let mut duration_vec = vec![];
+        for _ in 0..100 {
+            let data: Vec<i32> = rng.clone().sample_iter(&dist).take(size).collect();
+            let start = Instant::now();
+            shellsort(&mut data.clone(), data.len());
+            duration_vec.push(start.elapsed().as_micros());
+        }
+        let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
+        let output = format!(
+            "[SHELLSORT] Integers: {} - Average Time: {:?}μs",
+            size, average
+        );
+        println!("{}", output);
+
+        if let Err(e) = writeln!(file, "{}", output) {
+            eprintln!("Couldn't write to file: {}", e);
+        }
     }
 }
 
