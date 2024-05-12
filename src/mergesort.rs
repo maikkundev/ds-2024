@@ -73,7 +73,7 @@ fn main() {
         }
         let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
         let output = format!(
-            "[BUBBLESORT] Integers: {} - Average Time: {:?}μs",
+            "[MERGESORT] Integers: {} - Average Time: {:?}μs",
             size, average
         );
         println!("{}", output);
