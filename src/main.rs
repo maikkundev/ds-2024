@@ -1,18 +1,22 @@
 // ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
 //
 
+use glob::glob;
 use std::process::Command;
 
-use glob::glob;
-
 fn main() {
-    for file in glob("./*").expect("Failed to read glob pattern") {
-        Command::new("cargo")
-            .args([
-                "--bin",
-                file.unwrap().file_name().unwrap().to_str().unwrap(),
-            ])
-            .spawn()
-            .expect("Failed to spawn command");
+    for entry in glob("./*.rs").expect("Failed to read glob pattern") {
+        match entry {
+            Ok(path) => {
+                let file_name = path.file_stem().unwrap().to_str().unwrap();
+                if file_name != "main" && file_name != "plottings" {
+                    Command::new("cargo")
+                        .args(["run", "--bin", file_name, "--release"])
+                        .status()
+                        .expect("Failed to execute command");
+                }
+            }
+            Err(e) => println!("{:?}", e),
+        }
     }
 }
