@@ -1,3 +1,7 @@
+use rand::distributions::Uniform;
+use rand::prelude::*;
+use std::time::Instant;
+
 pub fn bubblesort(vec: &mut Vec<i32>) -> Vec<i32> {
     // Iterate over each index
     for i in 0..(vec.len()) {
@@ -12,7 +16,23 @@ pub fn bubblesort(vec: &mut Vec<i32>) -> Vec<i32> {
     vec.to_owned()
 }
 
-fn main() {}
+fn main() {
+    let rng = rand::thread_rng();
+    let mut vec: Vec<i32> = Vec::new();
+
+    let dist = Uniform::from(0..=1e6 as i32);
+    let data: Vec<Vec<i32>> = (100..=1000)
+        .step_by(100)
+        .map(|size| rng.clone().sample_iter(dist).take(size).collect())
+        .collect();
+    for data in data {
+        let length = data.len();
+        let start = Instant::now();
+        bubblesort(&mut vec);
+        let duration = start.elapsed().as_nanos();
+        println!("[BUBBLESORT] Integers: {} - Time: {:?}ns", length, duration)
+    }
+}
 
 #[cfg(test)]
 mod tests {
