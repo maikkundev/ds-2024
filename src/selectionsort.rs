@@ -1,5 +1,7 @@
 use rand::distributions::Uniform;
 use rand::prelude::*;
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::time::Instant;
 
 pub fn selectionsort(vec: &mut Vec<i32>) -> Vec<i32> {
@@ -23,6 +25,13 @@ fn main() {
     let rng = rand::thread_rng();
 
     let dist = Uniform::from(0..=1e6 as i32);
+
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .open("selectionsort_results.txt")
+        .unwrap();
+
     for size in (100..=1000).step_by(100) {
         let mut duration_vec = vec![];
         for _ in 0..100 {
@@ -32,10 +41,15 @@ fn main() {
             duration_vec.push(start.elapsed().as_micros());
         }
         let average = duration_vec.iter().sum::<u128>() / duration_vec.len() as u128;
-        println!(
+        let output = format!(
             "[SELECTIONSORT] Integers: {} - Average Time: {:?}μs",
             size, average
         );
+        println!("{}", output);
+
+        if let Err(e) = writeln!(file, "{}", output) {
+            eprintln!("Couldn't write to file: {}", e);
+        }
     }
 }
 
