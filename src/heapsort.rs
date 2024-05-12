@@ -2,14 +2,14 @@
 #[derive(Debug)]
 pub struct Heap<T>
 where
-    T: PartialOrd + Copy,
+    T: PartialEq + Ord + Copy,
 {
     data: Vec<T>,
 }
 
 impl<T> Heap<T>
 where
-    T: Ord + Copy,
+    T: PartialEq + Ord + Copy,
 {
     /// Creates an empty `Heap` instance.
     ///
@@ -131,6 +131,11 @@ where
         self.data.len()
     }
 
+    // Returns the heap as a vec.
+    pub fn to_vec(&self) -> Vec<T> {
+        self.data.to_owned()
+    }
+
     /// Takes a `Vec` and an index, and turns it into a `Heap`.
     fn heapify(&mut self, index: isize) {
         // Set current to index and make it mutable.
@@ -198,43 +203,40 @@ fn main() {}
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::collections::BinaryHeap;
 
     #[test]
-    fn test_push() {
-        let vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
-        let mut heap = Heap::new();
-        let mut binary_heap = BinaryHeap::new();
-        vec.iter().for_each(|x| {
-            heap.push(x);
-            binary_heap.push(x)
-        });
-        // assert_eq!(heap, binary_heap);
+    fn no_elements() {
+        let heap: Heap<i32> = Heap::new();
+        assert_eq!(heap.to_vec(), [])
     }
 
     #[test]
-    fn test_pop() {
-        let vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
+    fn one_element() {
+        let vec = vec![1];
         let mut heap = Heap::new();
-        let mut binary_heap = BinaryHeap::new();
-        vec.iter().for_each(|x| {
-            heap.push(x);
-            binary_heap.push(x)
-        });
-        heap.pop();
-        binary_heap.pop();
-        // assert_eq!(heap, binary_heap);
+        heap.push(1);
+        assert_eq!(heap.to_vec(), vec);
     }
 
     #[test]
-    fn test_into_sorted_vec() {
-        let vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
+    fn test_ten_elements() {
+        let mut vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
         let mut heap = Heap::new();
-        let mut binary_heap = BinaryHeap::new();
         vec.iter().for_each(|x| {
-            heap.push(x);
-            binary_heap.push(x)
+            heap.push(*x);
         });
-        // assert_eq!(heap.into_sorted_vec(), binary_heap.into_sorted_vec());
+        vec.sort();
+        assert_eq!(heap.into_sorted_vec(), vec);
+    }
+
+    #[test]
+    fn ten_elements_with_duplicates() {
+        let mut vec = vec![5, 10, 8, 2, 2, 5, 100, 31, 36];
+        let mut heap = Heap::new();
+        vec.iter().for_each(|x| {
+            heap.push(*x);
+        });
+        vec.sort();
+        assert_eq!(heap.into_sorted_vec(), vec);
     }
 }
