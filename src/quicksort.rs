@@ -1,11 +1,14 @@
+// ΡΑΤΣΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΜΑΡΙΟΣ - inf2021193 | ΑΒΑΓΙΑΝΟΣ ΜΙΧΑΗΛ - inf2021009
+// Creation: March 9
+// Update: May 12
+// cargo run --bin ds-2024
+
 use rand::distributions::Uniform;
 use rand::prelude::*;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-// How it works: https://en.wikipedia.org/wiki/Quicksort
-// Rust Implementation: https://gist.github.com/lispandfound/96b9065bf240f94a0c0f
 fn partition(vec: &mut Vec<i32>) -> Vec<i32> {
     // If vec length is 0 or 1, return the vec
     if vec.len() <= 1 {
