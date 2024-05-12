@@ -9,7 +9,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-pub fn bubblesort(vec: &mut Vec<i32>) -> Vec<i32> {
+pub fn bubblesort<T: PartialOrd>(vec: &mut Vec<T>) {
     // Iterate over each index
     for i in 0..(vec.len()) {
         for j in 0..(vec.len() - i - 1) {
@@ -19,8 +19,6 @@ pub fn bubblesort(vec: &mut Vec<i32>) -> Vec<i32> {
             }
         }
     }
-    // Return sorted vec
-    vec.to_owned()
 }
 
 fn main() {
@@ -61,14 +59,16 @@ mod tests {
 
     #[test]
     fn no_elements() {
-        let mut vec = vec![];
-        assert_eq!(bubblesort(&mut vec), [])
+        let mut vec: Vec<u64> = vec![];
+        bubblesort(&mut vec);
+        assert_eq!(vec, [])
     }
 
     #[test]
     fn one_element() {
         let mut vec = vec![1];
-        assert_eq!(bubblesort(&mut vec), [1])
+        bubblesort(&mut vec);
+        assert_eq!(vec, [1]);
     }
 
     #[test]

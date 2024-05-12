@@ -9,7 +9,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-pub fn insertionsort(vec: &mut Vec<i32>) -> Vec<i32> {
+pub fn insertionsort<T: PartialOrd>(vec: &mut Vec<T>) {
     // Loop over the vec
     for i in 1..vec.len() {
         let mut j = i;
@@ -18,8 +18,6 @@ pub fn insertionsort(vec: &mut Vec<i32>) -> Vec<i32> {
             j = j - 1;
         }
     }
-    // Return vec
-    vec.to_owned()
 }
 
 fn main() {
@@ -60,29 +58,35 @@ mod tests {
 
     #[test]
     fn no_elements() {
-        let mut vec = vec![];
-        assert_eq!(insertionsort(&mut vec), [])
+        let mut vec: Vec<i32> = vec![];
+        insertionsort(&mut vec);
+        assert_eq!(vec, [])
     }
 
     #[test]
     fn one_element() {
         let mut vec = vec![1];
-        assert_eq!(insertionsort(&mut vec), [1])
+        insertionsort(&mut vec);
+        assert_eq!(vec, [1])
     }
 
     #[test]
     fn ten_elements() {
         let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
         let mut sorted_vec = vec.clone();
+
+        insertionsort(&mut vec);
         sorted_vec.sort();
-        assert_eq!(insertionsort(&mut vec), sorted_vec)
+        assert_eq!(vec, sorted_vec)
     }
 
     #[test]
     fn ten_elements_duplicates() {
         let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
         let mut sorted_vec = vec.clone();
+
+        insertionsort(&mut vec);
         sorted_vec.sort();
-        assert_eq!(insertionsort(&mut vec), sorted_vec)
+        assert_eq!(vec, sorted_vec)
     }
 }

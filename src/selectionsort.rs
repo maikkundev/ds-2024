@@ -9,7 +9,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-pub fn selectionsort(vec: &mut Vec<i32>) -> Vec<i32> {
+pub fn selectionsort<T: PartialOrd>(vec: &mut Vec<T>) {
     // Loop over the length of the vec
     for i in 0..vec.len() {
         // Find the smallest number in the vec
@@ -22,8 +22,6 @@ pub fn selectionsort(vec: &mut Vec<i32>) -> Vec<i32> {
         // Swap the current number with smallest
         vec.swap(i, smallest);
     }
-    // Return the sorted vec
-    vec.to_owned()
 }
 
 fn main() {
@@ -64,29 +62,37 @@ mod tests {
 
     #[test]
     fn no_elements() {
-        let mut vec = vec![];
-        assert_eq!(selectionsort(&mut vec), [])
+        let mut vec: Vec<i32> = vec![];
+
+        selectionsort(&mut vec);
+        assert_eq!(vec, [])
     }
 
     #[test]
     fn one_element() {
         let mut vec = vec![1];
-        assert_eq!(selectionsort(&mut vec), [1])
+
+        selectionsort(&mut vec);
+        assert_eq!(vec, [1])
     }
 
     #[test]
     fn ten_elements() {
         let mut vec = vec![1, 5, 9, 3, 4, 11, 18, 51, 103, 2];
         let mut sorted_vec = vec.clone();
+
+        selectionsort(&mut vec);
         sorted_vec.sort();
-        assert_eq!(selectionsort(&mut vec), sorted_vec)
+        assert_eq!(vec, sorted_vec)
     }
 
     #[test]
     fn ten_elements_with_duplicates() {
         let mut vec = vec![1, 5, 9, 3, 5, 11, 11, 51, 103, 1];
         let mut sorted_vec = vec.clone();
+
+        selectionsort(&mut vec);
         sorted_vec.sort();
-        assert_eq!(selectionsort(&mut vec), sorted_vec)
+        assert_eq!(vec, sorted_vec)
     }
 }

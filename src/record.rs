@@ -1,10 +1,12 @@
-use csv::ReaderBuilder;
+use rand::{
+    distributions::{Alphanumeric, DistString},
+    prelude::*,
+};
 use serde::Deserialize;
-use std::error::Error;
 
 #[derive(Debug, Deserialize)]
 pub struct Record {
-    id: i32,
+    id: usize,
     pub gender: String,
     pub first_name: String,
     pub last_name: String,
@@ -23,7 +25,7 @@ impl PartialOrd for Record {
 }
 
 impl Record {
-    pub fn new(&self, id: i32, gender: String, first_name: String, last_name: String) -> Self {
+    pub fn new(&self, id: usize, gender: String, first_name: String, last_name: String) -> Self {
         Self {
             id,
             gender,
@@ -32,15 +34,17 @@ impl Record {
         }
     }
 
-    pub fn import_records() -> Result<Vec<Record>, Box<dyn Error>> {
-        let mut rdr = ReaderBuilder::new().from_path("MOCK_DATA.csv")?;
-        let mut records = vec![];
-
-        for result in rdr.deserialize() {
-            let record: Record = result?;
-            records.push(record);
+    pub fn create_rand() -> Record {
+        let mut rng = rand::thread_rng();
+        Record {
+            id: rng.gen_range(0..usize::MAX),
+            gender: Alphanumeric.sample_string(&mut rng, 32),
+            first_name: Alphanumeric.sample_string(&mut rng, 32),
+            last_name: Alphanumeric.sample_string(&mut rng, 32),
         }
+    }
 
-        Ok(records)
+    pub fn create_rand_vec(size: usize) -> Vec<Record> {
+        (0..size).map(|_| Record::create_rand()).collect()
     }
 }

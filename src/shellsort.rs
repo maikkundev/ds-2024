@@ -9,7 +9,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
-pub fn shellsort(vec: &mut Vec<i32>, length: usize) {
+pub fn shellsort<T: PartialOrd>(vec: &mut Vec<T>, length: usize) {
     let mut interval = length / 2;
     while interval > 0 {
         for i in interval..length {
@@ -63,7 +63,7 @@ mod tests {
 
     #[test]
     fn no_elements() {
-        let mut vec = vec![];
+        let mut vec: Vec<i32> = vec![];
         let length = vec.len();
         let mut sorted_vec = vec.clone();
 

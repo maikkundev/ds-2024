@@ -9,11 +9,19 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Instant;
 
+trait MaxExt: PartialOrd + Copy {
+    fn max(&self, other: &Self) -> Self {
+        return if self > other { *self } else { *other };
+    }
+}
+
+impl<T: PartialOrd + Copy> MaxExt for T {}
+
 /// Represents a binary max-heap.
 #[derive(Debug)]
 pub struct Heap<T>
 where
-    T: Ord + Copy,
+    T: PartialOrd + Copy,
 {
     data: Vec<T>,
 }
@@ -21,7 +29,7 @@ where
 // Implementation of FromIterator trait for Heap struct.
 impl<T, A> FromIterator<A> for Heap<T>
 where
-    T: Ord + Copy,
+    T: PartialOrd + Copy,
     A: Into<T>,
 {
     fn from_iter<I: IntoIterator<Item = A>>(iter: I) -> Self {
@@ -36,7 +44,7 @@ where
 /// Implementation of a binary max-heap.
 impl<T> Heap<T>
 where
-    T: Ord + Copy,
+    T: PartialOrd + Copy,
 {
     /// Creates an empty `Heap` instance.
     ///
@@ -163,8 +171,7 @@ where
         self.data.to_owned()
     }
 
-    /// Takes a `Vec` and an index, and turns it into a `Heap`.
-    fn heapify(&mut self, index: isize) {
+    pub fn heapify(&mut self, index: isize) {
         // Set current to index and make it mutable.
         let mut current = index;
 
@@ -199,8 +206,8 @@ where
     /// Returns the max index from three given indexes.
     fn get_max_index(&self, left_index: isize, right_index: isize, current_index: isize) -> isize {
         let max = self.data[left_index as usize]
-            .max(self.data[right_index as usize])
-            .max(self.data[current_index as usize]);
+            .max(&self.data[right_index as usize])
+            .max(&self.data[current_index as usize]);
 
         match max {
             i if i == self.data[current_index as usize] => current_index,
