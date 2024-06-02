@@ -1,43 +1,5 @@
-[package]
-name = "ds-2024"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-[dependencies]
-glob = "0.3.1"
-rand = "0.8.5"
-plotters = "0.3.1"
-serde = { version = "1.0", features = ["derive"] }
-csv = "1.1"
-
-[[bin]]
-name = "bubblesort"
-path = "src/bubblesort.rs"
-
-[[bin]]
-name = "quicksort"
-path = "src/quicksort.rs"
-
-[[bin]]
-name = "mergesort"
-path = "src/mergesort.rs"
-
-[[bin]]
-name = "selectionsort"
-path = "src/selectionsort.rs"
-
-[[bin]]
-name = "insertionsort"
-path = "src/insertionsort.rs"
-
-[[bin]]
-name = "shellsort"
-path = "src/shellsort.rs"
-
-[[bin]]
-name = "heapsort"
-path = "src/heapsort.rs"
-
-[[bin]]
-name = "plot"
-path = "src/plottings.rs"
+members = [
+    "crates/**"
+]
