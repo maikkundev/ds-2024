@@ -574,6 +574,9 @@ dependencies = [
 [[package]]
 name = "proj2"
 version = "0.1.0"
+dependencies = [
+ "cc",
+]
 
 [[package]]
 name = "quote"

@@ -4,7 +4,7 @@
 // This files doesn't need to be ran
 
 use plotters::prelude::*;
-use plotters::style::full_palette::{GREY_A100, GREY_A200, GREY_A400};
+use plotters::style::full_palette::GREY_A200;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{self, BufRead};

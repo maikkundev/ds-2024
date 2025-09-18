@@ -63,7 +63,7 @@ fn main() {
     for size in (100..=1000).step_by(100) {
         let mut duration_vec = vec![];
         for _ in 0..100 {
-            let mut data = Record::create_rand_vec(size);
+            let data = Record::create_rand_vec(size);
             let start = Instant::now();
             shellsort(&mut data.clone(), data.len());
             duration_vec.push(start.elapsed().as_micros());
